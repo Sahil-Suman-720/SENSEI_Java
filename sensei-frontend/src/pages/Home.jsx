@@ -11,7 +11,7 @@ function Home() {
   useEffect(() => {
     if (user && user.role === 'STUDENT') {
       setLoading(true);
-      recommendationApi.get(10)
+      recommendationApi.get(12)
         .then(res => setRecommendations(res.data.data || []))
         .catch(() => {})
         .finally(() => setLoading(false));

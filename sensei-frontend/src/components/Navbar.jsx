@@ -23,6 +23,7 @@ function Navbar() {
       </Link>
 
       <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+        <Link to="/" style={{ textDecoration: 'none', color: 'var(--text-secondary)' }}>Home</Link>
         <Link to="/search" style={{ textDecoration: 'none', color: 'var(--text-secondary)' }}>Find Teachers</Link>
 
         {/* Dark Mode Toggle */}

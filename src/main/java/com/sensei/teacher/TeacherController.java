@@ -58,7 +58,7 @@ public class TeacherController {
             @RequestParam(required = false, defaultValue = "rating") String sortBy,
             @RequestParam(required = false, defaultValue = "desc") String sortDir,
             @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "10") int size) {
+            @RequestParam(required = false, defaultValue = "12") int size) {
 
         TeacherDto.TeacherSearchRequest request = new TeacherDto.TeacherSearchRequest();
         request.setQuery(query);

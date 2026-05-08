@@ -15,7 +15,7 @@ function SearchTeachers() {
     if (e) e.preventDefault();
     setLoading(true);
     try {
-      const params = { page: pageNum, size: 10 };
+      const params = { page: pageNum, size: 12 };
       if (query) params.query = query;
       if (subject) params.subject = subject;
       if (maxPrice) params.maxPrice = maxPrice;
@@ -26,7 +26,7 @@ function SearchTeachers() {
       const results = res.data.data || [];
       setTeachers(results);
       setPage(pageNum);
-      setHasMore(results.length === 10);
+      setHasMore(results.length === 12);
     } catch (err) {
       console.error('Search failed:', err);
     }
