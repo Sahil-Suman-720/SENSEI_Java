@@ -39,7 +39,24 @@ function Dashboard() {
   return (
     <div>
       <h1 style={{ color: 'var(--text-primary)' }}>Dashboard</h1>
-      <p style={{ color: 'var(--text-muted)', marginBottom: '24px' }}>Welcome, {user.name} ({user.role})</p>
+      <p style={{ color: 'var(--text-muted)', marginBottom: '16px' }}>Welcome, {user.name} ({user.role})</p>
+
+      {/* Show interests for students */}
+      {user.role === 'STUDENT' && user.interests && user.interests.length > 0 && (
+        <div style={{ marginBottom: '24px', padding: '16px', backgroundColor: 'var(--card-bg)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+          <h3 style={{ color: 'var(--text-primary)', marginBottom: '10px', fontSize: '1rem' }}>My Interests</h3>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+            {user.interests.map(interest => (
+              <span key={interest} style={{
+                padding: '6px 14px', backgroundColor: 'var(--tag-bg)',
+                borderRadius: '20px', fontSize: '0.9rem', color: 'var(--text-secondary)'
+              }}>
+                {interest}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
 
       <h2 style={{ color: 'var(--text-primary)', marginBottom: '16px' }}>
         My {user.role === 'STUDENT' ? 'Bookings' : 'Sessions'}

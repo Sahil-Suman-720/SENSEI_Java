@@ -23,7 +23,9 @@ export function AuthProvider({ children }) {
     const res = await authApi.login({ email, password });
     const { token, userId, name, role } = res.data.data;
     localStorage.setItem('token', token);
-    setUser({ id: userId, name, email, role });
+    // Fetch full profile including interests
+    const profileRes = await authApi.getMe();
+    setUser(profileRes.data.data);
     return res.data.data;
   };
 
