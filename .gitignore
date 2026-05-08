@@ -1,0 +1,23 @@
+.idea/
+target/
+*.iml
+*.class
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+
+# Local JDK and MySQL (downloaded for build)
+jdk-21*/
+mysql-8.0.40-winx64/
+*.zip
+
+# Frontend
+sensei-frontend/node_modules/
+sensei-frontend/dist/
+
+# Environment
+.env
+application-local.yml
+
+# OS
+.DS_Store
+Thumbs.db
