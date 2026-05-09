@@ -71,6 +71,16 @@ public class TeacherService {
     public List<TeacherDto.TeacherResponse> searchTeachers(TeacherDto.TeacherSearchRequest request, int page, int size) {
         Specification<TeacherProfile> spec = Specification.where(null);
 
+        // Name/keyword search — matches teacher name or bio
+        if (request.getQuery() != null && !request.getQuery().isEmpty()) {
+            String keyword = "%" + request.getQuery().toLowerCase() + "%";
+            spec = spec.and((root, query, cb) ->
+                    cb.or(
+                            cb.like(cb.lower(root.get("user").get("name")), keyword),
+                            cb.like(cb.lower(root.get("bio")), keyword)
+                    ));
+        }
+
         if (request.getSubject() != null && !request.getSubject().isEmpty()) {
             spec = spec.and((root, query, cb) -> {
                 var join = root.<TeacherProfile, String>join("subjects");
