@@ -125,6 +125,71 @@ public class BookingService {
                 .orElseThrow(() -> new RuntimeException("Booking not found for order: " + orderId));
     }
 
+    @Transactional
+    public BookingDto.BookingResponse markAsCompleted(Long studentId, Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+
+        if (!booking.getStudent().getId().equals(studentId)) {
+            throw new RuntimeException("You can only mark your own bookings as completed");
+        }
+
+        if (booking.getStatus() != Booking.BookingStatus.CONFIRMED) {
+            throw new RuntimeException("Only confirmed bookings can be marked as completed");
+        }
+
+        booking.setStatus(Booking.BookingStatus.COMPLETED);
+        booking = bookingRepository.save(booking);
+        return mapBookingToResponse(booking);
+    }
+
+    @Transactional
+    public BookingDto.BookingResponse confirmBooking(Long teacherUserId, Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+
+        TeacherProfile teacher = teacherRepository.findByUserId(teacherUserId)
+                .orElseThrow(() -> new RuntimeException("Teacher profile not found"));
+
+        if (!booking.getTeacher().getId().equals(teacher.getId())) {
+            throw new RuntimeException("You can only confirm your own bookings");
+        }
+
+        if (booking.getStatus() != Booking.BookingStatus.PENDING) {
+            throw new RuntimeException("Only pending bookings can be confirmed");
+        }
+
+        booking.setStatus(Booking.BookingStatus.CONFIRMED);
+        booking = bookingRepository.save(booking);
+
+        // Increment teacher's total bookings
+        teacher.setTotalBookings(teacher.getTotalBookings() + 1);
+        teacherRepository.save(teacher);
+
+        return mapBookingToResponse(booking);
+    }
+
+    @Transactional
+    public BookingDto.BookingResponse rejectBooking(Long teacherUserId, Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+
+        TeacherProfile teacher = teacherRepository.findByUserId(teacherUserId)
+                .orElseThrow(() -> new RuntimeException("Teacher profile not found"));
+
+        if (!booking.getTeacher().getId().equals(teacher.getId())) {
+            throw new RuntimeException("You can only reject your own bookings");
+        }
+
+        if (booking.getStatus() != Booking.BookingStatus.PENDING) {
+            throw new RuntimeException("Only pending bookings can be rejected");
+        }
+
+        booking.setStatus(Booking.BookingStatus.CANCELLED);
+        booking = bookingRepository.save(booking);
+        return mapBookingToResponse(booking);
+    }
+
     // --- Mappers ---
 
     private BookingDto.SlotResponse mapSlotToResponse(AvailabilitySlot slot, boolean isBooked) {

@@ -47,6 +47,27 @@ public class TeacherController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
+    // Get my own teacher profile (for dashboard)
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('TEACHER')")
+    public ResponseEntity<ApiResponse<TeacherDto.TeacherResponse>> getMyProfile(
+            @AuthenticationPrincipal UserDetails userDetails) {
+        User user = userService.findByEmail(userDetails.getUsername());
+        TeacherDto.TeacherResponse response = teacherService.getTeacherByUserId(user.getId());
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    // Add a subject/skill
+    @PostMapping("/subjects")
+    @PreAuthorize("hasRole('TEACHER')")
+    public ResponseEntity<ApiResponse<TeacherDto.TeacherResponse>> addSubject(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody java.util.Map<String, String> body) {
+        User user = userService.findByEmail(userDetails.getUsername());
+        TeacherDto.TeacherResponse response = teacherService.addSubject(user.getId(), body.get("subject"));
+        return ResponseEntity.ok(ApiResponse.success("Subject added", response));
+    }
+
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<List<TeacherDto.TeacherResponse>>> searchTeachers(
             @RequestParam(required = false) String query,

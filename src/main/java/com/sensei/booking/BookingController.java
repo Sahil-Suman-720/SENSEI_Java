@@ -73,4 +73,37 @@ public class BookingController {
         List<BookingDto.BookingResponse> bookings = bookingService.getTeacherBookings(user.getId());
         return ResponseEntity.ok(ApiResponse.success(bookings));
     }
+
+    // Student: mark booking as completed
+    @PutMapping("/{bookingId}/complete")
+    @PreAuthorize("hasRole('STUDENT')")
+    public ResponseEntity<ApiResponse<BookingDto.BookingResponse>> markCompleted(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long bookingId) {
+        User user = userService.findByEmail(userDetails.getUsername());
+        BookingDto.BookingResponse response = bookingService.markAsCompleted(user.getId(), bookingId);
+        return ResponseEntity.ok(ApiResponse.success("Session marked as completed", response));
+    }
+
+    // Teacher: confirm a pending booking
+    @PutMapping("/{bookingId}/confirm")
+    @PreAuthorize("hasRole('TEACHER')")
+    public ResponseEntity<ApiResponse<BookingDto.BookingResponse>> confirmBooking(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long bookingId) {
+        User user = userService.findByEmail(userDetails.getUsername());
+        BookingDto.BookingResponse response = bookingService.confirmBooking(user.getId(), bookingId);
+        return ResponseEntity.ok(ApiResponse.success("Booking confirmed", response));
+    }
+
+    // Teacher: reject a pending booking
+    @PutMapping("/{bookingId}/reject")
+    @PreAuthorize("hasRole('TEACHER')")
+    public ResponseEntity<ApiResponse<BookingDto.BookingResponse>> rejectBooking(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long bookingId) {
+        User user = userService.findByEmail(userDetails.getUsername());
+        BookingDto.BookingResponse response = bookingService.rejectBooking(user.getId(), bookingId);
+        return ResponseEntity.ok(ApiResponse.success("Booking rejected", response));
+    }
 }

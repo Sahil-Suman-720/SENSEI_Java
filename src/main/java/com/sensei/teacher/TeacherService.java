@@ -68,6 +68,23 @@ public class TeacherService {
         return mapToResponse(profile);
     }
 
+    public TeacherDto.TeacherResponse getTeacherByUserId(Long userId) {
+        TeacherProfile profile = teacherRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Teacher profile not found"));
+        return mapToResponse(profile);
+    }
+
+    public TeacherDto.TeacherResponse addSubject(Long userId, String subject) {
+        TeacherProfile profile = teacherRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Teacher profile not found"));
+        if (subject == null || subject.trim().isEmpty()) {
+            throw new RuntimeException("Subject cannot be empty");
+        }
+        profile.getSubjects().add(subject.trim());
+        profile = teacherRepository.save(profile);
+        return mapToResponse(profile);
+    }
+
     public List<TeacherDto.TeacherResponse> searchTeachers(TeacherDto.TeacherSearchRequest request, int page, int size) {
         Specification<TeacherProfile> spec = Specification.where(null);
 

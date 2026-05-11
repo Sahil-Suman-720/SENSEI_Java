@@ -41,8 +41,10 @@ export const authApi = {
 export const teacherApi = {
   search: (params) => api.get('/teachers/search', { params }),
   getById: (id) => api.get(`/teachers/${id}`),
+  getMyProfile: () => api.get('/teachers/me'),
   createProfile: (data) => api.post('/teachers/profile', data),
   updateProfile: (data) => api.put('/teachers/profile', data),
+  addSubject: (subject) => api.post('/teachers/subjects', { subject }),
 };
 
 // --- Bookings ---
@@ -52,6 +54,9 @@ export const bookingApi = {
   getMyBookings: () => api.get('/bookings/my-bookings'),
   getTeacherBookings: () => api.get('/bookings/teacher-bookings'),
   createSlot: (data) => api.post('/bookings/slots', data),
+  markCompleted: (bookingId) => api.put(`/bookings/${bookingId}/complete`),
+  confirmBooking: (bookingId) => api.put(`/bookings/${bookingId}/confirm`),
+  rejectBooking: (bookingId) => api.put(`/bookings/${bookingId}/reject`),
 };
 
 // --- Payments ---
