@@ -41,6 +41,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/bookings/slots/{teacherId}").permitAll()
                 .requestMatchers("/api/payments/webhook").permitAll()
                 .requestMatchers("/api/reviews/teacher/**").permitAll()
+                .requestMatchers("/actuator/**").permitAll()
+                .requestMatchers("/manage/**").permitAll()
                 // Everything else requires authentication
                 .anyRequest().authenticated()
             )

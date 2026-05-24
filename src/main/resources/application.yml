@@ -1,6 +1,14 @@
 server:
   port: 8080
 
+management:
+  endpoints:
+    web:
+      base-path: /manage
+      exposure:
+        include: beans,info,health,httpexchanges
+
+
 spring:
   application:
     name: sensei
@@ -49,3 +57,4 @@ razorpay:
   key-id: rzp_test_placeholder
   key-secret: placeholder
   webhook-secret: placeholder
+
